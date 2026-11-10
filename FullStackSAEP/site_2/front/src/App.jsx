@@ -59,7 +59,7 @@ function App() {
               style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', width: '220px', backgroundColor: '#f9f9f9' }}
             >
               <h4>{carro.marca} - {carro.modelo || carro.nome}</h4>
-              <p><strong>Ano:</strong> {carro.ano}</p>
+              
               <p style={{ color: 'green', fontWeight: 'bold' }}>R$ {carro.preco}</p>
               
               {/* O BOTÃO DE DELETAR */}
@@ -85,6 +85,7 @@ import {useEffect, useState} from 'react';
 const [carregando, setCarregando] = useState(true);
 const [veiculos, setVeiculos] = useState([]);
 const [error, setError] = useState("");
+const [novoCarro, setNovoCarro] = useState([]) //Vai mostrar o novo carro
 
 useEffect(() => { //Use Effect Apenas mostra na tela quando ela abrir de primeira, fazendo um gatilho ao abrir
   axios.get('http://localhost:3000/carros')
@@ -100,12 +101,42 @@ useEffect(() => { //Use Effect Apenas mostra na tela quando ela abrir de primeir
   })
 }, []);
 
+const ApagarVendas = (idCarro) => {
+  axios.delete('Url pra deletar')
+ .then(() => {
+     const atualizacao = carros.filter( carro => carro.id !== idCarro ) // Esse "carro" recebe os valores
+     setVeiculos(atualizacao);
+     alert("Carro excluido!");
+ })
+ .catch ((err) => {
+     alert("Não foi possível excluir esse veículo");
+     console.error(err);
+ })
+}
 
+//Teste 1
+const AdicionarVeiculo = () => {
+  axios.post('url do post')
+  .then((resposta) => {
+      alert("carro adicionado com sucesso!")
+      setNovoCarro(resposta)
+      setVeiculos.append(novoCarro)
+  })
+  
+}
+  
 if (setCarregando) return <h2>Carregando estoque...</h2>
 if (setError) return <h2>{error}</h2>
 
 return (
   <div>
-    <p>oi</p>
+    {if carro.length === 0 ? ( <p>Estoque vazio, total de carro {carros.length}</p> ) : (
+        carros.map((carro) => (
+        <div key={carro.id}>
+           <h4>{carro.marca} - {carro.modelo || carro.nome}</h4>
+           <p><strong>Ano:</strong> {carro.ano}</p>
+        </div>
+        ))
+    )
   </div>
 )
