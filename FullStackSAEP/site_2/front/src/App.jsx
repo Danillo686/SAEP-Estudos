@@ -78,3 +78,34 @@ function App() {
 }
 
 export default App;
+
+import axios from 'axios';
+import {useEffect, useState} from 'react';
+
+const [carregando, setCarregando] = useState(true);
+const [veiculos, setVeiculos] = useState([]);
+const [error, setError] = useState("");
+
+useEffect(() => { //Use Effect Apenas mostra na tela quando ela abrir de primeira, fazendo um gatilho ao abrir
+  axios.get('http://localhost:3000/carros')
+  .then((resposta) => { // resposta recebe os dados que são retornado do get
+    setVeiculos(resposta.data.res || []);
+  })
+  .catch((err) => {
+    setError("Não foi possível mostrar os carros!");
+    console.error(err)
+  })
+  .finally(() => {
+    setCarregando(false);
+  })
+}, []);
+
+
+if (setCarregando) return <h2>Carregando estoque...</h2>
+if (setError) return <h2>{error}</h2>
+
+return (
+  <div>
+    <p>oi</p>
+  </div>
+)
